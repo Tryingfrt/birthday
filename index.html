@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Gift Across The Distance — For Daisy 🌼</title>
+    <title>A Warm Birthday Wish — For Athala</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -685,6 +685,13 @@
 </head>
 <body>
     <!-- ==========================================
+         BACKGROUND AUDIO
+         ========================================== -->
+    <audio id="background-audio" loop preload="auto">
+        <source src="birthday.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ==========================================
          3D CANVAS
          ========================================== -->
     <div id="canvas-container">
@@ -711,18 +718,18 @@
                 <div class="distance-visual">
                     <div class="location-point">
                         <div class="location-orb"></div>
-                        <span class="location-label">Philippines</span>
+                        <span class="location-label">Pakistan</span>
                     </div>
                     <div class="connection-beam"></div>
                     <div class="location-point">
                         <div class="location-orb"></div>
-                        <span class="location-label">Your Friend</span>
+                        <span class="location-label">Indonesia</span>
                     </div>
                 </div>
                 
                 <p class="arrival-message">
-                    "Some friendships are written in the stars,<br>
-                    destined to shine across any distance..."
+                    "Some moments are written in the stars,<br>
+                    and they shine across any distance..."
                 </p>
                 
                 <button class="begin-btn" id="begin-btn">Enter This Moment</button>
@@ -744,8 +751,8 @@
         <div id="screen-birthday" class="screen">
             <div class="birthday-content">
                 <p class="birthday-pretitle">Happy Birthday</p>
-                <h1 class="birthday-name">Daisy De Leon</h1>
-                <p class="birthday-date">December 29</p>
+                <h1 class="birthday-name">Athala</h1>
+                <p class="birthday-date" id="birthday-date">Today</p>
                 
                 <div class="gift-orb-container">
                     <div class="gift-ring gift-ring-1">
@@ -757,13 +764,13 @@
                     <div class="gift-ring gift-ring-3">
                         <span class="ring-star" style="bottom: 0; left: 50%;">✦</span>
                     </div>
-                    <div class="gift-orb">🌼</div>
+                    <div class="gift-orb">🎂</div>
                 </div>
                 
                 <p class="birthday-message">
-                    Like the daisy you're named after — you bring light, warmth, 
-                    and quiet beauty to everyone around you. Even from afar, 
-                    your kindness travels across oceans.
+                    Athala, wishing you a truly happy birthday.
+                    May your day feel light, calm, and full of good moments.
+                    Sending you warm wishes for a beautiful year ahead.
                 </p>
                 
                 <div class="birthday-wishes">
@@ -781,25 +788,24 @@
         <!-- SCREEN 4: FINALE -->
         <div id="screen-finale" class="screen">
             <div class="finale-content">
-                <div class="finale-icon">💫</div>
+                <div class="finale-icon">🌟</div>
                 
                 <p class="finale-quote">
-                    "Distance means so little<br>
-                    when friendship means so much."
+                    "Distance is just a detail<br>
+                    when a birthday wish is sincere."
                 </p>
                 
                 <div class="finale-divider"></div>
                 
                 <p class="finale-message">
-                    Daisy, on this special day, I hope you feel celebrated — 
-                    not just by those beside you, but by friends across the world 
-                    who are thinking of you. You make the world brighter simply 
-                    by being in it. Here's to another beautiful year ahead.
+                    Athala, I hope today feels special in the best way.
+                    Even from afar, I'm sending you warm wishes and good energy for the year ahead.
+                    May your days be peaceful, your goals feel closer, and your smile come easily.
                 </p>
                 
                 <div class="finale-closing">
-                    <p class="finale-signature">Happy Birthday, dear friend 🌼</p>
-                    <p class="finale-from">— With warmth, from across the miles</p>
+                    <p class="finale-signature">Happy Birthday, Athala</p>
+                    <p class="finale-from">— With warm wishes, from across the miles</p>
                 </div>
                 
                 <div class="finale-actions">
@@ -1260,7 +1266,6 @@
         let stars, floatingParticles;
         let mouseX = 0, mouseY = 0;
         let currentScreen = 0;
-        let isPlaying = false;
 
         let globe, connectionArc, locationMarkers, arcParticles;
 
@@ -1706,42 +1711,66 @@
         }
 
         /* ============================================
-           AMBIENT AUDIO
+           BACKGROUND AUDIO (birthday.mp3)
            ============================================ */
         
-        let audio;
+        const backgroundAudio = document.getElementById('background-audio');
+        let isMuted = true;
 
-        function initAudio() {
-            if (!audio) {
-                audio = new Audio('brithday.mp3');
-                audio.loop = true;
-                audio.volume = 0.5;
+        function updateMuteButton() {
+            const muteBtn = document.getElementById('mute-btn');
+            if (isMuted) {
+                muteBtn.textContent = '🔇';
+                muteBtn.title = 'Unmute Sound';
+            } else {
+                muteBtn.textContent = '🔊';
+                muteBtn.title = 'Mute Sound';
             }
         }
 
-        function playAmbientTone() {
-            if (!audio) initAudio();
-            
-            if (audio.paused) {
-                audio.play().catch(e => console.error("Audio playback failed:", e));
-                isPlaying = true;
-                document.getElementById('mute-btn').textContent = '🔊';
+        function playAudio() {
+            if (backgroundAudio) {
+                backgroundAudio.volume = 0.5;
+                const playPromise = backgroundAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        isMuted = false;
+                        updateMuteButton();
+                        console.log('Audio playing');
+                    }).catch(error => {
+                        console.log('Audio play error:', error);
+                        // Auto-play was prevented, user needs to interact
+                        isMuted = true;
+                        updateMuteButton();
+                    });
+                }
             }
         }
 
-        function stopAudio() {
-            if (audio && !audio.paused) {
-                audio.pause();
-                isPlaying = false;
-                document.getElementById('mute-btn').textContent = '🔇';
+        function pauseAudio() {
+            if (backgroundAudio) {
+                backgroundAudio.pause();
+                isMuted = true;
+                updateMuteButton();
             }
         }
 
         function toggleAudio() {
-            if (isPlaying) {
-                stopAudio();
-            } else {
-                playAmbientTone();
+            if (backgroundAudio) {
+                if (backgroundAudio.paused) {
+                    playAudio();
+                } else {
+                    pauseAudio();
+                }
+            }
+        }
+
+        function stopAudio() {
+            if (backgroundAudio) {
+                backgroundAudio.pause();
+                backgroundAudio.currentTime = 0;
+                isMuted = true;
+                updateMuteButton();
             }
         }
 
@@ -1750,13 +1779,13 @@
            ============================================ */
         
         const messages = [
-            "Hey Daisy...",
-            "Today is a special day.",
-            "December 29 — your day to shine ✨",
-            "I know we're miles apart...",
-            "But some friendships transcend distance.",
-            "Yours is one of those rare connections.",
-            "So today, across the miles, I celebrate you."
+            "Hey Athala...",
+            "Just a small birthday wish for you.",
+            "I hope your day feels calm, bright, and happy ✨",
+            "Even with distance between us...",
+            "I'm sending warm wishes from here.",
+            "May this new year bring you health, peace, and good surprises.",
+            "Happy Birthday, Athala."
         ];
 
         let currentMessageIndex = 0;
@@ -1865,7 +1894,8 @@
         }
 
         function showRevelationScreen() {
-            playAmbientTone();
+            // Start playing background music
+            playAudio();
 
             transitionTo(screens.arrival, screens.revelation, 1);
             setTimeout(() => {
@@ -1979,7 +2009,14 @@
            ============================================ */
         
         document.addEventListener('DOMContentLoaded', () => {
+            // Set the birthday date to December 19
+            const dateEl = document.getElementById('birthday-date');
+            if (dateEl) {
+                dateEl.textContent = 'December 19';
+            }
+
             initThreeJS();
+            updateMuteButton();
             setTimeout(animateArrivalScreen, 400);
         });
     </script>
